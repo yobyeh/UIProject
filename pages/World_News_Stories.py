@@ -46,8 +46,14 @@ radio_selection = st.radio(
     label_visibility="collapsed",
     horizontal=True
 )
+#pre declare
+article_list = []
+article_tuple = ()
 
-
+if "article_list" not in st.session_state:
+    st.session_state.article_list = []
+if "article_tuple" not in st.session_state:
+    st.session_state.article_tuple = ()
 
 if st.button("Retrieve Data"):
     # make the API request
@@ -62,49 +68,53 @@ if st.button("Retrieve Data"):
     if response.status_code == 200:
         article_data = response.json()
         st.write(article_data)
-        article_num_results = article_data.get("num_results")
-        article_results = article_data.get("results")
-
-
-
-        article_list = []
-        article_tuple = ()
-        article_selected = st.selectbox(
-            "Articles",
-            article_tuple,
-            index=None,
-            placeholder="Select an article",
-        )
-
-        st.write('You selected:', option)
-
-        #get data
-        data = response.json()
-
-        #load titles in multiselect
-
-        #show title
-
-        #show link
-
-        #get location
-
-        #get lat long
-
-        #plot map
-
-        get_lat_long("Uttarakhand (India)")
-        st.write(data)
     else:
         st.write("Error: Unable to fetch data from the New York Times Top Stories API")
         st.write("Possible: Not enough time between requests")
         st.write("Max 500/day 5/min")
+
+    article_num_results = article_data.get("num_results")
+    article_results = article_data.get("results")
+
     
-    latlong = get_lat_long("Uttarakhand (India)")
-    if latlong:
-        print(latlong)
-    else:
-        st.write("No location data given")
+    for result in article_results:
+        title = result.get("title")
+        if title != "":
+            article_list.append(title)
+            article_tuple += (title,)
+        #if st.session_state["article_selected"] != "":
+            #st.session_state["image_url"] = ""
+    st.session_state["article_list"] = article_list
+
+if "article_selected" not in st.session_state:
+    st.session_state.article_selected = ""
+if "image_url" not in st.session_state:
+    st.session_state.image_url = ""
+if "latitude" not in st.session_state:
+    st.session_state.latitude = ""
+if "longitude" not in st.session_state:
+    st.session_state.longitude = ""
+
+st.session_state
+
+#if st.session_state["article_selected"] != "":
+    #st.session_state["image_url"] = ""
+
+article_selected = st.selectbox(
+    "Articles",
+    key="article_selected",
+    options=st.session_state["article_list"],
+    index=None,
+    placeholder="Select an article",
+    disabled=False
+    )
+
+st.header("")
+st.image(
+            #image link
+            "",
+            width=400, # Manually Adjust the width of the image as per requirement
+        )
 
     
     
