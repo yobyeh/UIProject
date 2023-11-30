@@ -37,7 +37,7 @@ def get_lat_long(location):
     return (latitude, longitude)
 
 #start of page
-st.title("NYT World Top Stories")
+st.title("NYT Top Stories")
 
 #radio button for selection world vs us
 radio_selection = st.radio(

@@ -50,20 +50,15 @@ def create_show_table():
     st.dataframe(df, hide_index=True)
 
 def create_show_chart():
-    
-    # Create a Pandas Series from the list
+    st.write("Authors vs number books on this list")
     series = pd.Series(author_list)
-
-    # Use value_counts to count occurrences of each element
     counts = series.value_counts().reset_index()
-
-    # Rename the columns for clarity
     counts.columns = ["Element", "Count"]
-
-    # Create a bar chart in Streamlit
     st.bar_chart(counts.set_index("Element"))
     st.line_chart(counts.set_index("Element"))
 
+
+st.header("Filters")
 #checkbox
 check = st.checkbox("Today")
 if check:
@@ -76,7 +71,7 @@ st.session_state["selected_list"] = st.select_slider(
     )
 
 #date slider
-st.session_state["selected_date"]= st.slider(
+st.session_state["Selected_date"]= st.slider(
     "select a date",
     #yyy-mm-dd
     min_value=datetime(2010,1,1),
