@@ -6,6 +6,7 @@ import json
 from datetime import datetime
 from datetime import date
 
+#start of page
 st.title("NYT Best Sellers Book List")
 
 #adjust parameters
@@ -13,9 +14,6 @@ if "selected_list" not in st.session_state:
     st.session_state.selected_list = ""
 if "selected_date" not in st.session_state:
     st.session_state.selected_date = datetime.today()
-
-
-#current
 date = "" #YYYY-MM-DD
 options = []
 author_list=[]
@@ -25,6 +23,7 @@ disable_date = False
 api_key = 'eGuDfZ7wBWskKTJeBnZqI0UCQCYApB3i'
 params = {'api-key': api_key}
 
+#for list slider 
 top_lists = ["hardcover-fiction", "trade-fiction-paperback", "hardcover-nonfiction", "paperback-nonfiction"]
 
 def create_show_table():
@@ -57,8 +56,8 @@ def create_show_chart():
     st.bar_chart(counts.set_index("Element"))
     st.line_chart(counts.set_index("Element"))
 
-
 st.header("Filters")
+
 #checkbox
 check = st.checkbox("Today")
 if check:
@@ -80,9 +79,7 @@ st.session_state["Selected_date"]= st.slider(
     disabled=disable_date
 )
 
-#st.write("session state")
-#st.write(st.session_state)
-
+#button
 if st.button("Load Best Sellers"):
     # make the API request
     if check:
@@ -92,10 +89,7 @@ if st.button("Load Best Sellers"):
     print(date_selected)
     
     list_selected = "/" + st.session_state["selected_list"]
-    
     api_url = 'https://api.nytimes.com/svc/books/v3/lists{}{}.json'.format(date_selected, list_selected)
-    #api_url = 'https://api.nytimes.com/svc/books/v3/lists/names.json'
-
     response = requests.get(api_url, params=params)
     
     if response.status_code == 200:

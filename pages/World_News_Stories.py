@@ -4,32 +4,25 @@ import numpy as np
 import requests
 import json
 
-#position stack for lat long
-
 #adjust parameters
 date = "current" #YYYY-MM-DD
-
-#request
+#requests
 api_key = 'eGuDfZ7wBWskKTJeBnZqI0UCQCYApB3i'
 
+#lat lon form PositionStack
 def get_lat_long(location):
     import http.client, urllib.parse
-
     conn = http.client.HTTPConnection('api.positionstack.com')
-
     params = urllib.parse.urlencode({
         'access_key': 'f204082c4dff73ceeabbf05d5c4eaf83',
         'query': location,
         'limit': 1,
     })
-
     conn.request('GET', '/v1/forward?{}'.format(params))
-
     res = conn.getresponse()
     location_data = res.read()
     location_json = json.loads(location_data.decode('utf-8'))
 
-    #st.write(location_json)
     location1 = location_json.get("data")
     location2 = location1[0]
     latitude = location2.get("latitude")
@@ -46,16 +39,17 @@ radio_selection = st.radio(
     label_visibility="collapsed",
     horizontal=True
 )
+
 #pre declare
 article_list = []
 article_tuple = ()
 article_results = []
-
 if "article_list" not in st.session_state:
     st.session_state.article_list = []
 if "article_tuple" not in st.session_state:
     st.session_state.article_tuple = ()
 
+#button
 if st.button("Load Top News"):
     # make the API request
     location_selection = "us"
@@ -85,10 +79,9 @@ if st.button("Load Top News"):
         if title != "":
             article_list.append(title)
             article_tuple += (title,)
-        #if st.session_state["article_selected"] != "":
-            #st.session_state["image_url"] = ""
     st.session_state["article_list"] = article_list
 
+#pre declare
 if "article_selected" not in st.session_state:
     st.session_state.article_selected = ""
 if "image_url" not in st.session_state:
@@ -97,9 +90,6 @@ if "latitude" not in st.session_state:
     st.session_state.latitude = ""
 if "longitude" not in st.session_state:
     st.session_state.longitude = ""
-
-#st.write("session state")
-#st.session_state
 
 #select box
 if len(st.session_state["article_list"]) > 0:
@@ -111,7 +101,6 @@ if len(st.session_state["article_list"]) > 0:
         placeholder="Select an article",
         disabled=False
         )
-
 
 #displaying selected article information
 if st.session_state["article_selected"] != "":
