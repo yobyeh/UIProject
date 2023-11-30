@@ -18,6 +18,7 @@ if "selected_date" not in st.session_state:
 #current
 date = "" #YYYY-MM-DD
 options = []
+author_list=[]
 disable_date = False
 
 #request
@@ -34,7 +35,6 @@ def create_show_table():
     #build table
     rank_list = []
     title_list = []
-    author_list = []
     for book in books_list:
         book_details_dict = book
         book_rank = book_details_dict.get("rank")
@@ -48,6 +48,21 @@ def create_show_table():
     new_books_dict = {"Rank":rank_list, "Title":title_list, "Author":author_list}
     df = pd.DataFrame(data = new_books_dict)
     st.dataframe(df, hide_index=True)
+
+def create_show_chart():
+    
+    # Create a Pandas Series from the list
+    series = pd.Series(author_list)
+
+    # Use value_counts to count occurrences of each element
+    counts = series.value_counts().reset_index()
+
+    # Rename the columns for clarity
+    counts.columns = ["Element", "Count"]
+
+    # Create a bar chart in Streamlit
+    st.bar_chart(counts.set_index("Element"))
+    st.line_chart(counts.set_index("Element"))
 
 #checkbox
 check = st.checkbox("Today")
@@ -70,8 +85,8 @@ st.session_state["selected_date"]= st.slider(
     disabled=disable_date
 )
 
-st.write("session state")
-st.write(st.session_state)
+#st.write("session state")
+#st.write(st.session_state)
 
 if st.button("Load Best Sellers"):
     # make the API request
@@ -93,6 +108,7 @@ if st.button("Load Best Sellers"):
         st.success('Data Loaded', icon="✅")
         #st.write(data)
         create_show_table()
+        create_show_chart()
 
     else:
         st.warning('Unable to fetch data from the New York Times', icon="⚠️")
