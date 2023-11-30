@@ -56,7 +56,7 @@ if "article_list" not in st.session_state:
 if "article_tuple" not in st.session_state:
     st.session_state.article_tuple = ()
 
-if st.button("Retrieve Data"):
+if st.button("Load Top News"):
     # make the API request
     location_selection = "us"
     if radio_selection == "World":
@@ -68,7 +68,6 @@ if st.button("Retrieve Data"):
     
     if response.status_code == 200:
         article_data = response.json()
-        st.write(article_data)
     else:
         st.write("Error: Unable to fetch data from the New York Times Top Stories API")
         st.write("Possible: Not enough time between requests")
@@ -98,17 +97,18 @@ if "latitude" not in st.session_state:
 if "longitude" not in st.session_state:
     st.session_state.longitude = ""
 
-st.write("session state")
-st.session_state
+#st.write("session state")
+#st.session_state
 
-article_selected = st.selectbox(
-    "Articles",
-    key="article_selected",
-    options=st.session_state["article_list"],
-    index=None,
-    placeholder="Select an article",
-    disabled=False
-    )
+if len(st.session_state["article_list"]) > 0:
+    article_selected = st.selectbox(
+        "Articles",
+        key="article_selected",
+        options=st.session_state["article_list"],
+        index=None,
+        placeholder="Select an article",
+        disabled=False
+        )
 
 
 #displaying selected article information
