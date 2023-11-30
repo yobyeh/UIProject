@@ -90,10 +90,11 @@ if st.button("Load Best Sellers"):
     
     if response.status_code == 200:
         data = response.json()
+        st.success('Data Loaded', icon="✅")
         #st.write(data)
         create_show_table()
 
     else:
-        st.write("Error: Unable to fetch data from the New York Times Books API")
+        st.warning('Unable to fetch data from the New York Times', icon="⚠️")
         st.write("Possible: Not enough time between requests")
         st.write("Max 500/day 5/min")

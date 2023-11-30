@@ -68,8 +68,9 @@ if st.button("Load Top News"):
     
     if response.status_code == 200:
         article_data = response.json()
+        st.success('Data Loaded', icon="✅")
     else:
-        st.write("Error: Unable to fetch data from the New York Times Top Stories API")
+        st.warning('Unable to fetch data from the New York Times', icon="⚠️")
         st.write("Possible: Not enough time between requests")
         st.write("Max 500/day 5/min")
 
@@ -129,10 +130,8 @@ if st.session_state["article_selected"] != "":
                 map_data = pd.DataFrame(data=map_dict)
                 color = st.color_picker("Color of map point", "#00f900")
                 st.map(data=map_data, zoom=7, color=color)
-
-
             else:
-                st.write("No location data")
+                st.warning('No location data found for this article', icon="⚠️")
             
 
 
