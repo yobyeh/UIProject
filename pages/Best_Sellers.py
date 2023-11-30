@@ -3,18 +3,27 @@ import pandas as pd
 import numpy as np
 import requests
 import json
+from datetime import datetime
+from datetime import date
 
 st.title("NYT Best Sellers Book List")
 
 #adjust parameters
-date = "current" #YYYY-MM-DD
+if "selected_list" not in st.session_state:
+    st.session_state.selected_list = ""
+if "selected_date" not in st.session_state:
+    st.session_state.selected_date = datetime.today()
+
+#current
+date = "" #YYYY-MM-DD
+options = []
 
 #request
 api_key = 'eGuDfZ7wBWskKTJeBnZqI0UCQCYApB3i'
-api_url = 'https://api.nytimes.com/svc/books/v3/lists/{}/hardcover-fiction.json'.format(date)
+api_url = 'https://api.nytimes.com/svc/books/v3/lists{}/names.json'.format(date)
 params = {'api-key': api_key}
 
-
+top_lists = ["hardcover-fiction", "paperback-trade-fiction", "hardcover-nonfiction", "paperback-nonfiction"]
 
 def create_show_table():
     #make dict from json data for table
@@ -40,12 +49,30 @@ def create_show_table():
     st.dataframe(df, hide_index=True)
 
 
-if st.button("GO"):
+#list slider
+st.session_state["selected_list"] = st.select_slider(
+    'Select a top list',
+    options=top_lists)
+
+#date slider
+st.session_state["selected_date"]= st.slider(
+    "select a date",
+    #yyy-mm-dd
+    min_value=datetime(2000,1,1),
+    max_value=datetime(2023,11,1),
+    format="YYYY/MM/DD"
+)
+
+st.write("session state")
+st.write(st.session_state)
+
+if st.button("Load Best Sellers"):
    # make the API request
     response = requests.get(api_url, params=params)
     
     if response.status_code == 200:
         data = response.json()
+        st.write(data)
         create_show_table()
 
     else:

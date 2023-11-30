@@ -100,6 +100,7 @@ if "longitude" not in st.session_state:
 #st.write("session state")
 #st.session_state
 
+#select box
 if len(st.session_state["article_list"]) > 0:
     article_selected = st.selectbox(
         "Articles",
@@ -126,7 +127,8 @@ if st.session_state["article_selected"] != "":
                 latlon = get_lat_long(article.get("geo_facet")[0])
                 map_dict = {"LAT":[latlon[0]], "LON":[latlon[1]]}
                 map_data = pd.DataFrame(data=map_dict)
-                st.map(data=map_data, zoom=7)
+                color = st.color_picker("Color of map point", "#00f900")
+                st.map(data=map_data, zoom=7, color=color)
 
 
             else:
