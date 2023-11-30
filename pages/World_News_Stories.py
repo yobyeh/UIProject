@@ -113,23 +113,22 @@ article_selected = st.selectbox(
 
 #displaying selected article information
 if st.session_state["article_selected"] != "":
-    print("test")
     for article in st.session_state["article_results"]:
         if article.get("title") == st.session_state["article_selected"]:
             st.header(article.get("title"))
             st.image(
                 #image link
-                article.get("multimedia")[1].get("url"),
-                width=400, # Manually Adjust the width of the image as per requirement
+                article.get("multimedia")[0].get("url"),
+                width=700, # Manually Adjust the width of the image as per requirement
             )
+            st.write(article.get("url"))
             if len(article.get("geo_facet")) > 0:
                 latlon = get_lat_long(article.get("geo_facet")[0])
-                #st.write(latlon)
                 map_dict = {"LAT":[latlon[0]], "LON":[latlon[1]]}
                 map_data = pd.DataFrame(data=map_dict)
                 st.map(data=map_data, zoom=7)
 
-                
+
             else:
                 st.write("No location data")
             
