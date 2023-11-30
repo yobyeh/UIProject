@@ -49,6 +49,7 @@ radio_selection = st.radio(
 #pre declare
 article_list = []
 article_tuple = ()
+article_results = []
 
 if "article_list" not in st.session_state:
     st.session_state.article_list = []
@@ -75,8 +76,10 @@ if st.button("Retrieve Data"):
 
     article_num_results = article_data.get("num_results")
     article_results = article_data.get("results")
+    if "article_data" not in st.session_state:
+        st.session_state.article_results = ""
+    st.session_state["article_results"] = article_results
 
-    
     for result in article_results:
         title = result.get("title")
         if title != "":
@@ -95,10 +98,8 @@ if "latitude" not in st.session_state:
 if "longitude" not in st.session_state:
     st.session_state.longitude = ""
 
+st.write("session state")
 st.session_state
-
-#if st.session_state["article_selected"] != "":
-    #st.session_state["image_url"] = ""
 
 article_selected = st.selectbox(
     "Articles",
@@ -109,12 +110,28 @@ article_selected = st.selectbox(
     disabled=False
     )
 
-st.header("")
-st.image(
-            #image link
-            "",
-            width=400, # Manually Adjust the width of the image as per requirement
-        )
+
+#displaying selected article information
+if st.session_state["article_selected"] != "":
+    print("test")
+    for article in st.session_state["article_results"]:
+        if article.get("title") == st.session_state["article_selected"]:
+            st.header(article.get("title"))
+            st.image(
+                #image link
+                article.get("multimedia")[1].get("url"),
+                width=400, # Manually Adjust the width of the image as per requirement
+            )
+            if len(article.get("geo_facet")) > 0:
+                latlon = get_lat_long(article.get("geo_facet")[0])
+                st.write(latlon)
+                map_data = 
+                st.map(map_data)
+            else:
+                st.write("No location data")
+            
+
+
 
     
     
