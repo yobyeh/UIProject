@@ -124,9 +124,12 @@ if st.session_state["article_selected"] != "":
             )
             if len(article.get("geo_facet")) > 0:
                 latlon = get_lat_long(article.get("geo_facet")[0])
-                st.write(latlon)
-                map_data = 
-                st.map(map_data)
+                #st.write(latlon)
+                map_dict = {"LAT":[latlon[0]], "LON":[latlon[1]]}
+                map_data = pd.DataFrame(data=map_dict)
+                st.map(data=map_data, zoom=7)
+
+                
             else:
                 st.write("No location data")
             
